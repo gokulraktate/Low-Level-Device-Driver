@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>LED Controller</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    button {
+      font-size: 20px;
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+
+    #statusLight {
+      margin-top: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.5s ease;
+      background-color: red; /* Default red (OFF) */
+    }
+
+    .on {
+      background-color: green !important;
+    }
+
+    .off {
+      background-color: red !important;
+    }
+
+    #statusText {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Arduino LED Web Control</h1>
+
+  <button onclick="toggleLED('on')">Turn ON</button>
+  <button onclick="toggleLED('off')">Turn OFF</button>
+
+  <br><br>
+  <div id="statusLight" class="off"></div>
+  <p id="statusText">LED is OFF</p>
+
+  <script>
+    function toggleLED(state) {
+      fetch(`/${state}`)
+        .then(res => res.text())
+        .then(() => updateLight(state));
+    }
+
+    function updateLight(state) {
+      const light = document.getElementById("statusLight");
+      const statusText = document.getElementById("statusText");
+
+      if (state === "on") {
+        light.classList.remove("off");
+        light.classList.add("on");
+        statusText.innerText = "LED is ON";
+      } else {
+        light.classList.remove("on");
+        light.classList.add("off");
+        statusText.innerText = "LED is OFF";
+      }
+    }
+  </script>
+</body>
+</html>
